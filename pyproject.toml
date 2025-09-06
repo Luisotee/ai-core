@@ -1,17 +1,15 @@
-[project]
+[tool.poetry]
 name = "ai-core"
 version = "0.1.0"
 description = "AI Core Service for Multi-Client Chatbot"
-authors = [
-    {name = "luisotee",email = "luisotaviomgr1@gmail.com"}
-]
-readme = "README.md"
-requires-python = "^3.11"
-dependencies = [
-    "fastapi (>=0.116.1,<0.117.0)",
-    "smolagents (>=1.21.3,<2.0.0)",
-    "uvicorn (>=0.35.0,<0.36.0)"
-]
+authors = ["luisotee <luisotaviomgr1@gmail.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.116.1"
+smolagents = "^1.21.3"
+uvicorn = "^0.35.0"
 
 
 [build-system]
