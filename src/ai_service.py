@@ -9,7 +9,7 @@ from typing import Optional, Dict, Any
 import logging
 import os
 from smolagents import CodeAgent
-from .agents import create_manager_agent, get_manager_model_info
+from .agents import create_manager_agent
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -102,14 +102,14 @@ class AIService:
         """
         try:
             # Test with a simple query
-            test_result = self.process_query("Hello, are you working properly?")
+            self.process_query("Hello, are you working properly?")
             
             return {
                 "status": "healthy",
                 "service": "ai-service",
                 "manager_agent": {
                     "status": "healthy",
-                    "model_info": get_manager_model_info(),
+                    "model": "gpt-4o-mini",
                     "test_query_success": True,
                     "agent_initialized": self.manager_agent is not None
                 },
@@ -121,7 +121,7 @@ class AIService:
                 "service": "ai-service", 
                 "manager_agent": {
                     "status": "unhealthy",
-                    "model_info": get_manager_model_info(),
+                    "model": "gpt-4o-mini",
                     "test_query_success": False,
                     "agent_initialized": self.manager_agent is not None,
                     "error": str(e)
@@ -157,7 +157,7 @@ class AIService:
         """
         return {
             "service": "ai-service",
-            "manager_model": get_manager_model_info(),
+            "manager_model": "gpt-4o-mini",
             "specialized_agents": [
                 {"name": item["name"], "type": type(item["agent"]).__name__} 
                 for item in self.specialized_agents

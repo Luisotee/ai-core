@@ -6,7 +6,7 @@ and uses LiteLLMModel with GPT-4o-mini for general conversation handling.
 """
 
 from smolagents import CodeAgent, LiteLLMModel
-from typing import Optional, Dict, Any, List
+from typing import Optional, List
 import os
 import logging
 
@@ -71,24 +71,3 @@ def create_manager_agent(
         logger.error(f"Failed to create Manager Agent: {e}")
         raise
 
-def get_manager_model_info() -> Dict[str, Any]:
-    """
-    Get information about the manager agent's model configuration.
-    
-    Returns:
-        Dict[str, Any]: Model information
-    """
-    return {
-        "model_id": "gpt-4o-mini",
-        "provider": "OpenAI",
-        "framework": "LiteLLM",
-        "temperature": 0.7,
-        "max_tokens": 2000,
-        "requests_per_minute": 50,
-        "capabilities": [
-            "text_generation",
-            "code_execution", 
-            "agent_coordination",
-            "tool_usage"
-        ]
-    }
