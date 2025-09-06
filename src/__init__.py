@@ -5,6 +5,7 @@ This package contains the core AI functionality for the multi-client chatbot.
 """
 
 from .ai_service import AIService, get_ai_service
+from .agents import ManagerAgent, BaseAgent
 from .models import (
     ChatRequest,
     ChatResponse,
@@ -21,6 +22,8 @@ from .models import (
 __all__ = [
     "AIService",
     "get_ai_service",
+    "ManagerAgent",
+    "BaseAgent",
     "ChatRequest",
     "ChatResponse", 
     "UserCreateRequest",
