@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
 from datetime import datetime, timezone
+from src import get_ai_service
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -39,11 +40,22 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint for service monitoring"""
-    return {
-        "status": "healthy",
-        "service": "ai-core",
-        "timestamp": datetime.now(timezone.utc).isoformat()
-    }
+    try:
+        # Get AI service instance and perform health check
+        ai_service = get_ai_service()
+        health_result = ai_service.health_check()
+        
+        # Add timestamp to the response
+        health_result["timestamp"] = datetime.now(timezone.utc).isoformat()
+        
+        return health_result
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": "ai-core",
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
 
 if __name__ == "__main__":
     # Get configuration from environment variables

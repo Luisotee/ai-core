@@ -10,6 +10,7 @@ import logging
 import os
 from smolagents import CodeAgent
 from .agents import create_manager_agent
+from .database import get_database_manager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +33,9 @@ class AIService:
             max_steps: Maximum steps for agent execution
         """
         try:
+            # Initialize database manager
+            self.db_manager = get_database_manager()
+            
             # Create the manager agent with coordination capabilities
             self.manager_agent: CodeAgent = create_manager_agent(
                 api_key=openai_api_key,
@@ -44,7 +48,7 @@ class AIService:
             # Store specialized agents that the manager can coordinate
             self.specialized_agents = []
             
-            logger.info("AI Service initialized successfully with manager agent")
+            logger.info("AI Service initialized successfully with manager agent and database")
             
         except Exception as e:
             logger.error(f"Failed to initialize AI Service: {e}")
@@ -101,6 +105,9 @@ class AIService:
             Dict[str, Any]: Health status information
         """
         try:
+            # Test database health
+            db_health = self.db_manager.health_check()
+            
             # Test with a simple query
             self.process_query("Hello, are you working properly?")
             
@@ -113,9 +120,16 @@ class AIService:
                     "test_query_success": True,
                     "agent_initialized": self.manager_agent is not None
                 },
+                "database": db_health,
                 "specialized_agents_count": len(self.specialized_agents)
             }
         except Exception as e:
+            # Get database health even if AI test fails
+            try:
+                db_health = self.db_manager.health_check()
+            except:
+                db_health = {"status": "unknown", "error": "Could not perform database health check"}
+            
             return {
                 "status": "unhealthy",
                 "service": "ai-service", 
@@ -126,6 +140,7 @@ class AIService:
                     "agent_initialized": self.manager_agent is not None,
                     "error": str(e)
                 },
+                "database": db_health,
                 "specialized_agents_count": len(self.specialized_agents)
             }
     
