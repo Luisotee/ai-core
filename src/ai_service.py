@@ -10,7 +10,7 @@ import logging
 import os
 from smolagents import CodeAgent
 from .agents import create_manager_agent
-from .database import get_database_manager
+from .services.database_service import get_database_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -33,8 +33,8 @@ class AIService:
             max_steps: Maximum steps for agent execution
         """
         try:
-            # Initialize database manager
-            self.db_manager = get_database_manager()
+            # Initialize database service
+            self.db_service = get_database_service()
             
             # Create the manager agent with coordination capabilities
             self.manager_agent: CodeAgent = create_manager_agent(
@@ -48,7 +48,7 @@ class AIService:
             # Store specialized agents that the manager can coordinate
             self.specialized_agents = []
             
-            logger.info("AI Service initialized successfully with manager agent and database")
+            logger.info("AI Service initialized successfully with manager agent and SQLAlchemy database")
             
         except Exception as e:
             logger.error(f"Failed to initialize AI Service: {e}")
@@ -97,7 +97,7 @@ class AIService:
             logger.error(f"Failed to process query: {e}")
             raise Exception(f"AI processing failed: {e}")
     
-    def health_check(self) -> Dict[str, Any]:
+    async def health_check(self) -> Dict[str, Any]:
         """
         Perform a health check of the AI service.
         
@@ -106,7 +106,7 @@ class AIService:
         """
         try:
             # Test database health
-            db_health = self.db_manager.health_check()
+            db_health = await self.db_service.health_check()
             
             # Test with a simple query
             self.process_query("Hello, are you working properly?")
@@ -126,7 +126,7 @@ class AIService:
         except Exception as e:
             # Get database health even if AI test fails
             try:
-                db_health = self.db_manager.health_check()
+                db_health = await self.db_service.health_check()
             except:
                 db_health = {"status": "unknown", "error": "Could not perform database health check"}
             

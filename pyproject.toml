@@ -10,6 +10,10 @@ python = "^3.11"
 fastapi = "^0.116.1"
 smolagents = {extras = ["litellm"], version = "^1.21.3"}
 uvicorn = "^0.35.0"
+sqlalchemy = "^2.0.43"
+alembic = "^1.16.5"
+asyncpg = "^0.30.0"
+aiosqlite = "^0.21.0"
 
 
 [build-system]

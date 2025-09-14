@@ -43,7 +43,7 @@ async def health_check():
     try:
         # Get AI service instance and perform health check
         ai_service = get_ai_service()
-        health_result = ai_service.health_check()
+        health_result = await ai_service.health_check()
         
         # Add timestamp to the response
         health_result["timestamp"] = datetime.now(timezone.utc).isoformat()
