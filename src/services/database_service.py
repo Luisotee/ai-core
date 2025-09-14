@@ -362,6 +362,21 @@ class DatabaseService:
         
         context_type = "group" if group_id else "private"
         return f"Recent {context_type} conversation:\n" + "\n".join(context_lines)
+    
+    async def get_group_conversation_history(
+        self,
+        group_id: str,
+        limit: int = 50
+    ) -> List[Conversation]:
+        """Get conversation history for a specific group (all users in the group)"""
+        async with AsyncSessionLocal() as session:
+            query = select(Conversation).where(
+                Conversation.group_id == group_id
+            ).order_by(desc(Conversation.timestamp)).limit(limit)
+            
+            result = await session.execute(query)
+            conversations = result.scalars().all()
+            return list(reversed(conversations))  # Return in chronological order
 
 
 # Global database service instance
