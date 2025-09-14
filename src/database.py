@@ -28,7 +28,7 @@ class DatabaseManager:
         Args:
             database_url: Database URL. If None, uses DATABASE_URL env var.
         """
-        self.database_url = database_url or os.getenv("DATABASE_URL", "file:../prisma/dev.db")
+        self.database_url = database_url or os.getenv("DATABASE_URL", "file:data/dev.db")
         
         # Extract SQLite file path from database URL
         if self.database_url.startswith("file:"):

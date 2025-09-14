@@ -9,7 +9,7 @@ from sqlalchemy.orm import DeclarativeBase
 from pathlib import Path
 
 # Database configuration
-DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "prisma" / "dev.db"
+DATABASE_PATH = Path(__file__).parent.parent.parent / "data" / "dev.db"
 DATABASE_URL = f"sqlite+aiosqlite:///{DATABASE_PATH}"
 
 class Base(DeclarativeBase):
